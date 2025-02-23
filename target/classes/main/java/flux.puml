@@ -1,0 +1,67 @@
+@startuml
+start
+
+:Initialisation du jeu;
+:Création du joueur;
+:Création de l'ennemi;
+:Affichage du menu principal;
+
+while (Le jeu est en cours ?) is (Oui)
+    :Afficher les statistiques du joueur et de l'ennemi;
+    :Afficher le menu d'actions;
+
+    switch (Choix de l'action)
+        case ("1" - Combattre)
+            :Lancer le combat;
+
+            while (Le combat est en cours ?) is (Oui)
+                :Afficher les options de combat;
+                switch (Choix du combat)
+                    case ("1" - Attaquer)
+                        :Effectuer une attaque;
+                        if (L'ennemi est mort ?) then (Oui)
+                            :Victoire ! Gagner de l'expérience;
+                            break
+                        endif
+                    case ("2" - Fuir)
+                        :Tenter de fuir;
+                        if (Fuite réussie ?) then (Oui)
+                            :Retour au menu principal;
+                            break
+                        else
+                            :L'ennemi attaque;
+                            if (Le joueur est mort ?) then (Oui)
+                                :Afficher "Vous avez été vaincu!";
+                                stop
+                            endif
+                        endif
+                    case ("3" - Utiliser un objet)
+                        :Afficher l'inventaire et utiliser un objet;
+
+                endswitch
+            endwhile
+        case ("2" - Se reposer)
+            :Récupérer des points de vie;
+        case ("3" - Acheter un objet)
+            :Afficher les objets du shop;
+            if (Le joueur a assez d'or ?) then (Oui)
+                :Acheter l'objet;
+            else
+                :Afficher "Pas assez d'or";
+            endif
+        case ("4" - Gérer l'inventaire)
+            :Afficher l'inventaire du joueur;
+            if (Objet disponible à équiper ?) then (Oui)
+                :Permettre d'équiper un objet;
+            else
+                :Afficher "Aucun équipement disponible";
+            endif
+        case ("0" - Quitter)
+            :Afficher "Merci d'avoir joué!";
+            stop
+
+    endswitch
+endwhile
+
+stop
+@enduml
