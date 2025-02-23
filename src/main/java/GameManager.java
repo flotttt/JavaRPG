@@ -1,6 +1,4 @@
-// GameManager.java (Gestion du jeu)
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class GameManager {
     private Scanner scanner = new Scanner(System.in);
