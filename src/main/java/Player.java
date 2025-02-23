@@ -5,7 +5,9 @@ public class Player extends Character {
     private static final int MAX_HEALTH = 100;
     private static final int EXPERIENCE = 0;
     private static final int SKILLS_NUMBER = 1;
-    private int gold;
+    private static final double ESCAPE_CHANCE = 0.35; // 35% de chance de fuir
+
+    private int gold = 50;
     private ArrayList<String> inventory;
     private String equippedItem;
     private HashMap<String, Integer> itemBonuses;
@@ -13,27 +15,33 @@ public class Player extends Character {
     public int attackSkillsNumber, defenseSkillsNumber;
 
     public Player(String name) {
-        super(name, Player.MAX_HEALTH, Player.EXPERIENCE);
+        super(name, MAX_HEALTH, EXPERIENCE);
         this.attackSkillsNumber = 0;
-        this.defenseSkillsNumber = Player.SKILLS_NUMBER;
+        this.defenseSkillsNumber = SKILLS_NUMBER;
         this.gold = 100;
         this.inventory = new ArrayList<>();
         this.equippedItem = "Aucun";
 
-        // Définition des bonus d'équipement
         this.itemBonuses = new HashMap<>();
-        this.itemBonuses.put("Épée en fer", 10);  // +10 dégâts
-        this.itemBonuses.put("Bouclier en bois", 5);  // +5 défense
+        this.itemBonuses.put("Épée en fer", 10);
+        this.itemBonuses.put("Bouclier en bois", 5);
     }
 
     @Override
-    public int attack() {
+    public void attack(Character target) {
+        if (!(target instanceof Enemy enemy)) {
+            System.out.println("Impossible d'attaquer cette cible.");
+            return;
+        }
+
         int baseAttack = (int) (Math.random() * ((double) this.getExperience() / 4 + attackSkillsNumber * 3 + 3) +
                 (double) this.getExperience() / 10 + attackSkillsNumber * 2 + defenseSkillsNumber + 1);
 
-        // Ajout du bonus si un équipement est équipé
         int bonus = itemBonuses.getOrDefault(this.equippedItem, 0);
-        return baseAttack + bonus;
+        int totalAttack = baseAttack + bonus;
+
+        System.out.println(this.getName() + " attaque " + enemy.getName() + " et inflige " + totalAttack + " dégâts !");
+        enemy.takeDamage(totalAttack);
     }
 
     @Override
@@ -41,9 +49,19 @@ public class Player extends Character {
         int baseDefense = (int) (Math.random() * ((double) this.getExperience() / 4 + defenseSkillsNumber * 3 + 3) +
                 (double) this.getExperience() / 10 + defenseSkillsNumber * 2 + attackSkillsNumber + 1);
 
-        // Ajout du bonus de défense si un bouclier est équipé
         int bonus = itemBonuses.getOrDefault(this.equippedItem, 0);
         return baseDefense + bonus;
+    }
+
+
+    public boolean fuir() {
+        if (Math.random() < ESCAPE_CHANCE) {
+            System.out.println(this.getName() + " s'échappe avec succès !");
+            return true;
+        } else {
+            System.out.println(this.getName() + " tente de fuir mais échoue !");
+            return false;
+        }
     }
 
     public void rest() {
@@ -64,10 +82,9 @@ public class Player extends Character {
         if (this.gold >= amount) {
             this.gold -= amount;
             return true;
-        } else {
-            System.out.println("Pas assez d'or !");
-            return false;
         }
+        System.out.println("Pas assez d'or !");
+        return false;
     }
 
     public void addItem(String item) {
@@ -79,7 +96,6 @@ public class Player extends Character {
         if (inventory.isEmpty()) {
             System.out.println("Votre inventaire est vide.");
         } else {
-            System.out.println("Inventaire :");
             for (int i = 0; i < inventory.size(); i++) {
                 System.out.println("[" + (i + 1) + "] " + inventory.get(i));
             }
@@ -88,14 +104,27 @@ public class Player extends Character {
 
     public void equipItem(int itemIndex) {
         if (itemIndex < 1 || itemIndex > inventory.size()) {
-            System.out.println("Choix invalide. Veuillez choisir un numéro correct.");
+            System.out.println("Choix invalide.");
             return;
         }
-        this.equippedItem = inventory.get(itemIndex - 1);
+
+        String itemToEquip = inventory.get(itemIndex - 1);
+        if (!itemBonuses.containsKey(itemToEquip)) {
+            System.out.println("Cet objet ne peut pas être équipé.");
+            return;
+        }
+
+        this.equippedItem = itemToEquip;
         System.out.println("Vous avez équipé : " + this.equippedItem);
     }
 
-    public void showEquipment() {
-        System.out.println("Équipement actuel : " + this.equippedItem);
+    public void takeDamage(int damage) {
+        this.decreaseHealth(damage);
+        System.out.println(this.getName() + " a perdu " + damage + " points de vie.");
+    }
+
+    public void gagnerExperience(int experience) {
+        this.increaseExperience(experience);
+        System.out.println(this.getName() + " gagne " + experience + " points d'expérience !");
     }
 }

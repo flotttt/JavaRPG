@@ -19,8 +19,9 @@ public class Shop {
         itemPrices.put("Bouclier en bois", 40);
     }
 
-    public void showItems() {
+    public void showItems(Player player) {
         System.out.println("Bienvenue dans la boutique !");
+        System.out.println("Vous avez " + player.getGold() + " pièces d'or.");
         for (int i = 0; i < itemNames.size(); i++) {
             System.out.println((i + 1) + " - " + itemNames.get(i) + " - " + itemPrices.get(itemNames.get(i)) + " pièces d'or");
         }
@@ -37,6 +38,7 @@ public class Shop {
 
         if (player.spendGold(price)) {
             System.out.println("Vous avez acheté : " + selectedItem);
+            player.addItem(selectedItem);
             return selectedItem;
         } else {
             System.out.println("Pas assez d'or !");
