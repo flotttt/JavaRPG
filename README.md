@@ -43,7 +43,6 @@
 - Mise en place d'un système de gestion d'inventaire et d'équipement dans un jeu textuel.
 - Pratique de la documentation avec JavaDoc.
 - Génération et intégration de diagrammes UML et de flux.
-- Utilisation de Git/GitHub pour le versioning du projet.
 
 ## Remarques complémentaires
 
