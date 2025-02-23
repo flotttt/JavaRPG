@@ -39,11 +39,6 @@
 - Pratique de la documentation avec JavaDoc.
 - Génération et intégration de diagrammes UML et de flux.
 
-## Remarques complémentaires
-
-- L’implémentation du diagramme de flux est encore en cours et pourrait être améliorée.
-- Quelques ajustements peuvent être apportés pour optimiser le système de combat et l'affichage du menu.
-- Ajouter des tests unitaires pourrait être une prochaine étape pour assurer la stabilité du projet.
 
 ---
 
